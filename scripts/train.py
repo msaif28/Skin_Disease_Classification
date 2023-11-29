@@ -1,7 +1,7 @@
-# train.py
 import sys
 import os
 from tqdm import tqdm
+from sklearn.metrics import accuracy_score
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
@@ -29,36 +29,74 @@ def select_model(model_name, num_classes):
         raise ValueError("Unknown model name")
 
 def train_model(model, train_loader, criterion, optimizer, num_epochs, model_name, device):
-    model.to(device)  # Move the model to the specified device (GPU or CPU)
+    output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'output'))
+    os.makedirs(output_dir, exist_ok=True)
+    print(f"Output directory is set to: {output_dir}")
+
+    if torch.cuda.is_available() and torch.cuda.device_count() > 1:
+        print(f"Using {torch.cuda.device_count()} GPUs!")
+        model = nn.DataParallel(model)
+
+    model.to(device)
+    
     for epoch in range(num_epochs):
-        model.train()  # Set the model to training mode
-        for images, labels in train_loader:
-            images, labels = images.to(device), labels.to(device)  # Move data to device
+        model.train()
+        total_loss = 0
+        correct = 0
+        total = 0
+        progress_bar = tqdm(enumerate(train_loader), total=len(train_loader), desc=f"Epoch {epoch+1}/{num_epochs}")
+        for i, (images, labels) in progress_bar:
+            images, labels = images.to(device), labels.to(device)
+            optimizer.zero_grad()
             outputs = model(images)
             loss = criterion(outputs, labels)
-            optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-        print(f"Epoch {epoch+1}/{num_epochs} completed.")
 
-    # Save the trained model
+            total_loss += loss.item()
+            _, predicted = torch.max(outputs.data, 1)
+            correct += (predicted == labels).sum().item()
+            total += labels.size(0)
+
+            progress_bar.set_postfix(loss=total_loss/(i+1), accuracy=100. * correct / total)
+
+        average_loss = total_loss / len(train_loader)
+        accuracy = 100. * correct / total
+        print(f"Epoch {epoch+1} completed. Average Loss: {average_loss:.4f}. Accuracy: {accuracy:.2f}%.")
+
+    model_save_path = os.path.join(output_dir, f"{model_name}_{num_epochs}_epochs.pth")
     try:
-        torch.save(model.state_dict(), f"{model_name}.pth")
-        print(f"Model saved as {model_name}.pth")
+        torch.save(model.module.state_dict() if isinstance(model, nn.DataParallel) else model.state_dict(), model_save_path)
+        print(f"Model saved to {model_save_path}")
     except IOError as e:
         print(f"Error saving the model: {e}")
 
 def main():
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")  # Check for GPU availability
-    model_name = "AlexNet"  # Replace with the desired model's name
-    num_classes = 55  # Number of classes in your dataset
+    # Check GPU availability and list them
+    if torch.cuda.is_available():
+        print("Available GPUs:", torch.cuda.device_count())
+        for i in range(torch.cuda.device_count()):
+            print("GPU", i, ":", torch.cuda.get_device_name(i))
+    # Set the default device for computations
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(device)
+    model_name = "AlexNet"
+    num_classes = 55
 
-    train_loader = load_data('../data/train', batch_size=32)
+    data_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'data', 'train'))
+    train_loader = load_data(data_dir, batch_size=32)
+    
     model = select_model(model_name, num_classes)
-    model = model.to(device)
+    if torch.cuda.device_count() > 1:
+        print(f"Using {torch.cuda.device_count()} GPUs!")
+        model = nn.DataParallel(model)
+
+    model.to(device)
+    
+     # Define your criterion and optimizer
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
-    num_epochs = 10  # Set the number of epochs you want to train for
+    num_epochs = 10
 
     train_model(model, train_loader, criterion, optimizer, num_epochs, model_name, device)
 
