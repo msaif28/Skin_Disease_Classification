@@ -1,0 +1,61 @@
+                       precision    recall  f1-score   support
+
+                 Acne       0.70      0.94      0.81        53
+              Actinic       0.75      0.60      0.67        40
+               Atopic       0.68      0.61      0.64        28
+ Bacterial-Infections       0.53      0.31      0.39        29
+                Basal       0.82      0.74      0.78        66
+        Eczema_photos       0.76      0.81      0.78       185
+             Impetigo       0.14      0.12      0.13         8
+                Lupus       0.43      0.42      0.43        24
+              Rosacea       0.76      0.85      0.80        26
+     allergic-contact       0.47      0.47      0.47        15
+      alopecia-areata       0.71      0.83      0.77        12
+        atypical-nevi       0.60      0.69      0.64        13
+   bullous-pemphigoid       0.55      0.55      0.55        11
+    candidiasis-large       0.58      0.85      0.69        13
+           dermatitis       0.30      0.27      0.29        11
+       dermatofibroma       0.78      0.70      0.74        10
+     distal-subungual       0.92      0.79      0.85        14
+       drug-eruptions       0.43      0.50      0.46        12
+       epidermal-cyst       0.40      0.40      0.40        10
+  fixed-drug-eruption       0.50      0.38      0.43         8
+        genital-warts       0.87      0.81      0.84        16
+               herpes       0.68      0.81      0.74        16
+     herpes-cutaneous       0.70      0.58      0.64        12
+          herpes-type       0.68      0.68      0.68        22
+        herpes-zoster       0.31      0.33      0.32        15
+      hives-Urticaria       0.56      0.42      0.48        12
+           intertrigo       0.43      0.30      0.35        10
+      keratoacanthoma       0.86      0.55      0.67        11
+       lentigo-adults       0.43      0.30      0.35        10
+     melanocytic-nevi       0.56      0.42      0.48        12
+molluscum-contagiosum       0.60      0.43      0.50        14
+              morphea       0.78      0.64      0.70        11
+          mucous-cyst       0.82      0.75      0.78        12
+            pemphigus       0.46      0.40      0.43        15
+            psoriasis       0.76      0.93      0.84        14
+   pyogenic-granuloma       0.75      0.86      0.80        14
+      rhus-dermatitis       0.50      0.44      0.47         9
+sebaceous-hyperplasia       0.71      0.71      0.71         7
+ seborrheic-keratoses       0.77      0.77      0.77        22
+ seborrheic-keratosis       0.40      0.36      0.38        11
+            skin-tags       0.73      0.89      0.80         9
+     sun-damaged-skin       0.57      0.57      0.57        14
+           tinea-body       0.50      0.36      0.42        14
+           tinea-foot       0.79      0.86      0.83        22
+          tinea-groin       0.79      0.79      0.79        14
+           tinea-hand       0.78      0.88      0.82         8
+     tinea-laboratory       0.82      0.90      0.86        10
+        tinea-primary       0.75      0.75      0.75         8
+          tinea-scalp       0.56      0.71      0.63         7
+     tinea-versicolor       0.73      0.79      0.76        14
+ venous-malformations       0.45      0.56      0.50         9
+      viral-exanthems       0.40      0.55      0.46        11
+         warts-common       0.71      0.77      0.74        13
+           warts-flat       0.75      0.75      0.75         8
+        warts-plantar       0.73      0.79      0.76        14
+
+             accuracy                           0.67      1028
+            macro avg       0.63      0.62      0.62      1028
+         weighted avg       0.67      0.67      0.67      1028
