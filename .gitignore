@@ -159,11 +159,9 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 #
-#
-# Ignore '.jpg' files in the 'data' directory
-data/*.jpg
-
-# Optional: Ignore '.jpg' files in all subdirectories of 'data'
-data/**/*.jpg
+test/**/*.jpg
+train/**/*.jpg
+train_orig/**/*.jpg
+val/**/*.jpg
 
 output/*.pth
